@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>五角星</title>
+</head>
+<style>
+	canvas{
+		display: block;
+		margin: 0 auto;
+		border:1px solid red;
+	}
+</style>
+<body>
+	<canvas id="canvas" width="800" height="600">
+		你的浏览器不支持，请换chrome浏览器
+	</canvas>
+</body>
+<script>
+	var canvas=document.querySelector('#canvas');
+	canvas.width=800;
+	canvas.height=600;
+	var context=canvas.getContext('2d');
+
+	for(let i=0;i<100;i++){
+		
+		var x=random(1,801);
+		var y=random(1,601);
+		var R=random(6,21);
+		fivepStar(x,y,R);
+		
+	}
+	// 五角星
+	/***
+	* x为五角星中心横坐标
+	* y为五角星中心纵坐标
+	* R为五角星外五点外接圆半径
+	* color五角星颜色 默认随机颜色rgba格式
+		如果需要自定义颜色，直接把参数改为自定义颜色为字符串类型
+	 	如果需要随机且不需要透明可去代码rgba处把Math.random()改为1
+	* angle五角星偏转角度,以(1,0)为参考点 默认随机偏转
+		如果不需要随机可自定义偏转角度 参数为数值类型
+	* stroke五角星边框 默认有 如果不需要参数改为false
+	***/
+	function fivepStar(x,y,R,color=true,angle=true,stroke=true){
+		context.beginPath();//开始
+		var k=Math.sin(18*Math.PI/180)/Math.sin(36*Math.PI/180);
+			k=k.toFixed(2);
+			r=k*R;//大圆与小圆的关系
+
+
+		/**************五角星偏转角度**************/
+		if (angle===true) {
+			angle=random(0,361);//五角星随机偏转角度,以(1,0)为参考点
+		}else{
+			angle=angle;//自定义角度
+		}
+
+
+		/**************五角星颜色**************/
+		if (color===true) {
+			color='rgba('+random(0,256)+','+random(0,256)+','+random(0,256)+','+Math.random()+')';//随机颜色
+		}else{
+			color=color;//自定义颜色
+		}
+
+
+		//五角星十点坐标
+		for(let i=0;i<5;i++){
+			context.lineTo(R*Math.cos((72*i+angle)*Math.PI/180)+x,R*Math.sin((72*i+angle)*Math.PI/180)+y);
+			context.lineTo(r*Math.cos((72*i+36+angle)*Math.PI/180)+x,r*Math.sin((72*i+36+angle)*Math.PI/180)+y)
+		}
+		//五角星起点坐标
+		context.lineTo(R*Math.cos(angle*Math.PI/180)+x,R*Math.sin(angle*Math.PI/180)+y);
+		context.fillStyle=color;
+		context.fill();
+		if (stroke) {
+			context.stroke();
+		}
+		context.closePath();
+		function random(m,n){
+			var num=Math.max(m,n)-Math.min(m,n);
+			return Math.round(Math.random()*num+Math.min(m,n));
+		}
+	}
+
+	function random(m,n){
+			var num=Math.max(m,n)-Math.min(m,n);
+			return Math.round(Math.random()*num+Math.min(m,n));
+		}
+</script>
+</html>

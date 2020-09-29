@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>时钟</title>
+	<style type="text/css">
+		.time{
+			position: relative;
+			width: 400px;
+			height: 400px;
+			margin:60px auto;
+			border: 1px solid red;
+			background: lightgray;
+		}
+		span{
+			display:inline-block;
+			position: absolute;
+			width:2px;
+			height: 20px;
+			background: black;
+			left: 50%;
+			margin-left:-1px;
+			top: 50%;
+			margin-top: -10px;
+			transform: translateY(150px);
+			color: white;
+			text-align: center;
+			line-height: 20px;
+			font-size: 16px; 
+		}
+		span:nth-child(2){
+			transform: rotateZ(30deg)  translateY(150px);
+		}
+		span:nth-child(3){
+			transform: rotateZ(60deg) translateY(150px);
+		}
+		span:nth-child(4){
+			transform: rotateZ(90deg) translateY(150px);
+		}
+		span:nth-child(5){
+			transform: rotateZ(120deg) translateY(150px);
+		}
+		span:nth-child(6){
+			transform: rotateZ(150deg) translateY(150px);
+		}
+		span:nth-child(7){
+			transform: rotateZ(180deg) translateY(150px);
+		}
+		span:nth-child(8){
+			transform: rotateZ(210deg) translateY(150px);
+		}
+		span:nth-child(9){
+			transform: rotateZ(240deg) translateY(150px);
+		}
+		span:nth-child(10){
+			transform: rotateZ(270deg) translateY(150px);
+		}
+		span:nth-child(11){
+			transform: rotateZ(300deg) translateY(150px);
+		}
+		span:nth-child(12){
+			transform: rotateZ(330deg) translateY(150px);
+		}
+		.time>nav{
+			position: absolute;
+			left: 50%;
+			top: 50%;	 
+		}
+		.hours{
+			width:4px;
+			height: 50px;
+			background: black;
+			margin-left: -2px;
+			margin-top: -48px;
+			transform-origin: 2px 48px;
+		}
+		.minutes{
+			width:4px;
+			height:100px;
+			background:white;
+			margin-left: -2px;
+			margin-top: -98px;
+			transform-origin: 2px 98px;
+		}
+		.seconds{
+			width:2px;
+			height:150px;
+			background: yellow;
+			margin-left: -1px;
+			margin-top: -148px;
+			transform-origin: 1px 148px;
+		}
+	</style>
+</head>
+<body>
+	<div class="time">
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<nav class="hours"></nav>
+		<nav class="minutes"></nav>
+		<nav class="seconds"></nav>
+	</div>
+	<script type="text/javascript">
+		var timer=setInterval(fun,1000);
+		function fun(){
+			var time=new Date();
+			var hours=time.getHours();
+			var minutes=time.getMinutes();
+			var seconds=time.getSeconds();
+			var ms=time.getMilliseconds();
+			document.querySelector(".hours").style.transform='rotateZ('+(hours*30+minutes/2+seconds/120)+'deg)';
+			document.querySelector(".minutes").style.transform='rotateZ('+(minutes*6+seconds/10)+'deg)';
+			document.querySelector(".seconds").style.transform='rotateZ('+seconds*6+'deg)';
+		}
+	</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

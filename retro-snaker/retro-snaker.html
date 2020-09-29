@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>贪吃蛇</title>
+	<style>
+		*{
+			margin:0;
+			padding:0; 
+		}
+		canvas{
+			display:block;
+			margin:20px auto;
+			border:1px solid lightgray; 
+		}
+		div{
+			width:600px;
+			height:20px;
+			margin:0 auto; 
+		}
+		input{
+			text-align: center;
+		}
+		span{
+			margin-left: 20px;
+			background-color:lightyellow;
+			font-size: 26px; 
+		}
+	</style>
+</head>
+<body>
+	<canvas width="600" height="400">
+		你的浏览器不支持canvas，请使用chrome或更高版本的浏览器！2333
+	</canvas>
+	<div>
+		<input type="text" value="0" disabled="">
+		<span>space控制游戏的开始和暂停</span>
+	</div>
+</body>
+<script>
+	var canvas=document.querySelector('canvas');
+	var ctx=canvas.getContext('2d');
+	var size=10;//蛇身的单元大小
+	var snakeLength=6;//设置蛇的起始蛇长
+	var x=y=0;//设置蛇的起始坐标
+	var map=[];//存储蛇的每一单元位置
+	var direction=39;//蛇头方向默认向右
+	var foodx=foody=size;//食物起始坐标
+	var timer=null;//定时器
+	var time=160;//速度
+
+	food(10);
+	var score=document.querySelector('input');
+	var i=0;
+
+
+	//游戏难度提高
+	if (i>10) {
+		time=100;
+	}else if (i>40) {
+		time=60;
+	}else if (i>80) {
+		time=20;
+	}
+	//游戏结束
+	function end(){
+		clearInterval(timer);
+		if (score.value<100) {
+			alert('继续努力哦!\nGAME OVER')
+		}else if (score.value>=100) {
+			alert('哎呦，不错!\nGAME OVER')
+		}else if (score.value>=400) {
+			alert('非常棒!\nGAME OVER')
+		}else if (score.value>=800) {
+			alert('你已无人能挡!\nGAME OVER')
+		}else if (score.value>=1600) {
+			alert('无敌战神!\nGAME OVER')
+		}
+		window.location=window.location;//刷新页面
+		return;
+	}
+	//绘制蛇并让它移动
+	function moveSnake(){
+		switch(direction){
+			case 37:x-=size;break;//左
+			case 38:y-=size;break;//上
+			case 39:x+=size;break;//右
+			case 40:y+=size;break;//下
+		}
+		//判断是否撞墙，撞墙则结束
+		if (x<0||y<0||x+size>canvas.width||y+size>canvas.height) {
+			end();
+		}
+		map.forEach(function(e){
+			if (e.x==x&&e.y==y) {
+				end();
+			}
+		})
+		if (map.length>snakeLength) {//保持蛇长
+			var last=map.shift();//删除数组第一项，并返回该元素
+			ctx.clearRect(last.x,last.y,size,size)
+		}
+		//把单元蛇身保存并绘制
+		map.push({"x":x,"y":y});
+		ctx.fillStyle='cyan';
+		ctx.fillRect(x,y,size,size);
+		if (x==foodx&&y==foody) {
+			food(10);
+			snakeLength++;
+			i++;
+			score.value=i*10;
+		}
+	}
+
+
+	//随机放置食物
+	function food(x){
+		foodx=Math.ceil(Math.random()*canvas.width/x)*x-x;
+		foody=Math.ceil(Math.random()*canvas.height/x)*x-x;
+		//判断不让食物随机到蛇身上
+		map.forEach(function(e){
+			if (e.x==foodx&&e.y==foody) {
+				food(10);
+			}
+		})
+		ctx.fillStyle='#000';//食物颜色
+		ctx.fillRect(foodx,foody,x,x);//绘制矩形
+	}
+
+
+	//控制蛇的方向
+	var code=null;
+	var space=true;
+	document.onkeydown=function(event){
+		if (event.keyCode==32) {
+			if (space) {
+				timer=setInterval(moveSnake,60);
+				space=!space;
+			}else{
+				clearInterval(timer);
+				space=!space;
+			}
+			return;
+		}
+		//判断如果是相反键则失效
+		if (Math.abs(code-event.keyCode)==2) {
+			code=code;
+		}else{
+			code=event.keyCode;
+		}
+		switch(code){
+			case 37:direction=37;break;//左
+			case 38:direction=38;break;//下
+			case 39:direction=39;break;//右
+			case 40:direction=40;break;//上
+		}
+	}
+
+</script>
+</html>

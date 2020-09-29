@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>画板</title>
+	<style>
+		.wrap{
+			width:600px;
+			height:600px;
+			border: 1px solid;
+			margin:60px auto; 
+			position: relative; 
+		}
+		#canvas{
+			display:block;
+			border-bottom: 1px solid;
+			margin-bottom:20px;   
+		}
+		button{
+			margin:0 120px; 
+		}
+		.font{
+			position: absolute;
+			height:500px;
+			background-color:cyan;
+			top:0; 
+			width: 600px;
+			font-size:60px;
+			font-family: serif; 
+		}
+		h3{
+			text-align: center;
+			margin-top:160px; 
+		}
+		ul{
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+		li{
+			width:30px;
+			height:30px;
+			border-radius: 50%;
+			float: left;
+			margin:15px;  
+		}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<canvas id="canvas" width="600" height="500">画笔写字</canvas>
+		<button>橡皮擦</button>
+		<button>画笔</button>
+		<div class="font"><h3>欢<br/>迎</h3></div>
+		<ul>
+			<li style="background-color:red;margin-left:100px;"></li>
+			<li style="background-color:orange"></li>
+			<li style="background-color:yellow"></li>
+			<li style="background-color:green"></li>
+			<li style="background-color:cyan"></li>
+			<li style="background-color:blue"></li>
+			<li style="background-color:purple"></li>
+		</ul>
+	</div>
+</body>
+<script>
+	var canvas=document.querySelector('#canvas');
+	var ctx=canvas.getContext('2d');
+
+	var font=document.querySelector('.font');
+	var btn=document.querySelectorAll('button');
+	var li=document.querySelectorAll('li');
+
+	//画笔
+	btn[1].onclick=function(){
+		font.style.display='none';
+		canvas.style.cursor="url('pen.png'),pointer";
+		//选择画笔的颜色
+		var color='';
+		for(var i=0;i<li.length;i++){
+			li[i].onclick=function(){
+				color=this.style.backgroundColor;
+				console.log(color)
+			}
+		}
+		canvas.onmousedown=function(){
+			window.onmousemove=function(event){
+				ctx.fillStyle=color;
+				ctx.fillRect(event.offsetX,event.offsetY,5,5);
+			}
+		}
+		canvas.onmouseup = function(){
+			window.onmousemove=function(){}
+	    }
+	}
+	//橡皮擦
+	btn[0].onclick=function(){
+		canvas.onmousedown=function(){
+			window.onmousemove=function(event){
+				ctx.clearRect(event.offsetX,event.offsetY,20,20);
+			}
+		}
+		canvas.onmouseup = function(){
+			window.onmousemove=function(){}
+	    }
+	    canvas.style.cursor="url('xpc.cur'),pointer";
+	}
+</script>
+</html>

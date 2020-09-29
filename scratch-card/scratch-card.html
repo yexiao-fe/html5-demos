@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>刮刮乐</title>
+	<style>
+		.box{
+			margin: 60px 100px;
+			width:300px;
+			height:500px;
+			border:1px solid red;
+			background:rgba(255,0,0,.8);
+		}
+		h2{
+			text-align: center;
+			font-size: 30px;
+			color:cyan;
+		}
+		.jiang{
+			width:200px;
+			height: 200px;
+			border-radius: 50%;
+			background-color:rgba(255,0,0,.3);
+			line-height: 200px;
+			text-align: center;
+			font-size: 60px;
+			color:gold;
+			margin:20px auto; 
+		}
+		.prize{
+			height:200px;
+			position: relative;
+		}
+		.content{
+			width:300px;
+			height: 200px;
+			background-color:rgba(0,0,255,0.1);
+			line-height: 200px;
+			text-align: center;
+			font-size: 60px;
+			color:purple;
+			margin:20px auto; 
+		}
+		#canvas{
+			position:absolute;
+			top: 0;
+			left: 0;
+			cursor: url('xpc.cur'),pointer;
+		}
+	</style>
+</head>
+<body>
+<div class="box">
+		<h2>刮 刮 乐</h2>
+		<div class="jiang">奖</div>
+		<div class="prize">
+			<div class="content">500万</div>
+			<canvas id="canvas" width="300" height="200"></canvas>
+		</div>
+	</div>	
+</body>
+<script>
+	var canvas=document.querySelector('#canvas')
+	var ctx=canvas.getContext('2d')
+	ctx.fillStyle='lightgray'
+	ctx.fillRect(0,0,300,200)
+	ctx.save()
+	ctx.font='30px serif'
+	ctx.fillStyle='black'
+	ctx.fillText('刮奖区',100,60)
+	ctx.save()
+	ctx.font='50px serif'
+	ctx.strokeStyle='red'
+	ctx.strokeText('大吉大利',50,150)
+
+	canvas.onmousedown=function(){
+			window.onmousemove=function(event){
+				ctx.clearRect(event.offsetX,event.offsetY,20,20);
+			}
+		}
+	canvas.onmouseup = function(){
+		window.onmousemove=function(){}
+    }
+</script>
+</html>

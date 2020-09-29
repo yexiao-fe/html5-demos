@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>计算器</title>
+	<style type="text/css">
+		.box{
+			width:232px;
+			height:320px;
+			border: 1px solid gray;
+			border-radius:5px;
+			overflow: hidden;
+			margin: 100px auto;
+			position: relative;   
+		}
+		.box div{
+			height: 80px;
+			width: 232px;
+			background-color: rgba(0,0,0,.5);
+			position: absolute;
+		}
+		ul,ul li{
+			margin: 0px;
+			padding: 0px;
+			list-style: none;
+		}
+		ul li {
+			width: 12px;
+			height: 12px;
+			border-radius: 50%;
+			float: left;
+			margin:5px 0px 0px 10px;
+			text-align: center;
+			line-height: 12px;
+			font-size:12px;
+			color: black;   
+		}
+		ul li:nth-child(1){
+			background: red;
+		}
+		ul li:nth-child(2){
+			background: gold;
+		}
+		ul li:nth-child(3){
+			background: green;
+		}
+		span{
+			opacity: 0;
+		}
+		ul:hover span{
+			opacity: 1;
+		}
+		input{
+			width:232px;
+			height: 60px;
+			display: block;
+			position: absolute;
+			bottom: 0px; 
+			font-size: 36px;
+			color: white;
+			text-align: right;
+			line-height: 60px;
+			border: none;
+			outline: none;
+			background: transparent;
+			right: 10px;	
+		}
+		input::-webkit-input-placeholder{
+			color: white; 	
+			}
+		table{
+			width:232px;
+			height:240px;
+			text-align: center;
+			background: lightgray;
+			font-size: 18px;
+			position: absolute;
+			bottom: 0px; 
+		}
+		table td{
+			border-bottom: 1px solid gray;
+			border-right: 1px solid gray;
+			box-sizing: border-box;
+			width: 58px;
+			height:48px;
+
+		}
+		tr td:last-child{
+			background: darkorange;
+			color: white;
+			border-right: 1px solid transparent;
+		}
+		table tr:last-child td{
+			border-bottom: 1px solid transparent;
+		}
+	</style>
+</head>
+<body>
+	<div class="box">
+		<div>
+			<ul>
+				<li class="data_cha"><span>x</span></li>
+				<li><span>-</span></li>
+				<li><span>+</span></li>
+			</ul>
+			<input type="text" disabled placeholder="0">
+		</div>
+		<table cellspacing="0" cellpadding="0">
+			<tr>
+				<td>AC</td>
+				<td>+/-</td>
+				<td class="yunsuanfu">%</td>
+				<td class="yunsuanfu">&divide;</td>
+			</tr>
+			<tr>
+				<td>7</td>
+				<td>8</td>
+				<td>9</td>
+				<td class="yunsuanfu">&times;</td>
+			</tr>
+			<tr>
+				<td>4</td>
+				<td>5</td>
+				<td>6</td>
+				<td class="yunsuanfu">-</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>2</td>
+				<td>3</td>
+				<td class="yunsuanfu">+</td>
+			</tr>
+			<tr>
+				<td colspan="2">0</td>
+				<td>.</td>
+				<td>=</td>
+			</tr>
+		</table>
+	</div>
+	<script type="text/javascript">
+		function $(x){
+			return document.querySelector(x);
+		}
+		function $1(y){
+			return document.querySelectorAll(y);
+		}
+		//点击x 计算器关闭
+		var data_cha=$('.data_cha');
+		var box = $('.box');
+		data_cha.onclick=function(){
+			box.style.display='none';
+		}
+		//点击 显示 背景效果 及建立交互
+		var bg=$1('td');
+		var length=bg.length;
+		var input=$('input')
+		for(var i=0;i<length;i++){
+			bg[i].index=i;
+			bg[i].onmousedown=function(){
+				if ((this.index)%4==3||(this.index)==length-1 ){
+					bg[this.index].style.backgroundColor='gray';
+				}else if (this.index==1||this.index==2||this.index==0) {
+					bg[this.index].style.backgroundColor='gray';		
+				}else{bg[this.index].style.backgroundColor='gray';
+					input.value=input.value+''+bg[this.index].innerHTML;
+					bg[0].innerHTML="C";
+					//正负 点击一下为负，再次点击为正	
+					var n=0;
+
+					bg[1].onclick=function(){
+						n++;
+						var kong='';
+						if (n%2==1) {
+							return input.value="-"+input.value;
+						}else{
+							for(i=1;i<input.value.length;i++){
+								kong+=input.value[i];
+							}
+							return input.value=kong;
+						}
+					}
+				}	
+			}
+			bg[i].onmouseup=function(){
+				bg[this.index].style.backgroundColor='';	
+			}
+		}
+		//点击C的时候变AC 并使文本框输入为空
+		bg[0].onclick=function(){
+			bg[0].innerHTML="AC";
+			return input.value='';
+		}
+		bg[16].onclick=function(){
+			if (input.value[0]==0) {
+				return input.value=input.value[0];
+			}
+		} 
+		//输入值
+		function shuru(){
+			 var num=Number(input.value);
+			 return num;
+		}
+		//加减乘除定义 并取第一次输入值
+		var yunsuanfu=$1('.yunsuanfu');
+		var x,y,opt;
+		yunsuanfu[0].onclick=function(){
+				opt="%";
+				x =shuru();
+				input.value='';
+			}
+		yunsuanfu[1].onclick=function(){
+				opt="&divide;";
+				x =shuru();
+				input.value='';
+			}
+		yunsuanfu[2].onclick=function(){
+				opt="&times;";
+				x =shuru();
+				input.value='';
+			}
+		yunsuanfu[3].onclick=function(){
+				opt="-";
+				x =shuru();
+				input.value='';
+			}
+		yunsuanfu[4].onclick=function(){
+				opt="+";
+				x =shuru();
+				input.value='';
+			}
+		bg[18].onclick=function(){
+				y=shuru();//取第二次输入值
+			if (opt=="%") {input.value=x%y;}
+			else if(opt=="-"){input.value=x-y;}
+			else if(opt=="+"){input.value=x+y;}
+			else if(opt=="&times;"){input.value=x*y;}
+			else if(opt=="&divide;"){input.value=x/y;}
+		}
+
+	</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
