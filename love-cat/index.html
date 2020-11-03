@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>爱心猫</title>
+	<style>
+		.wrapper {
+			text-align: center;
+			box-sizing: border-box;
+			padding-top: 10%;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="wrapper">
+		<canvas id="canvas" width="600" height="554"></canvas>
+	</div>
+</body>
+<script src="./index.js"></script>
+<script>
+	var canvas = document.querySelector('#canvas')
+	var ctx = canvas.getContext('2d')
+
+	catArr.forEach(e => {
+		_drawPath(ctx, e)
+	})
+	// obj 
+	function _drawPath(ctx, obj) {
+		ctx.strokeStyle = obj.ss;
+		ctx.fillStyle = obj.fs;
+		ctx.lineWidth = obj.lw;
+
+		// lineTo l l1 l2 ... ln
+		const untils = {
+			m: 'moveTo',
+			l: 'lineTo',
+			b: 'bezierCurveTo',
+			q: 'quadraticCurveTo'
+		}
+
+		ctx.beginPath();
+		for (key in obj) {
+			if (['ss', 'fs', 'lw', 'type'].includes(key)) continue;
+			ctx[untils[key.slice(0, 1)]](...obj[key])
+		}
+
+		//  f s cs fs fcs
+		if (obj.type.includes('f')) {
+			// 填充
+			ctx.fill();
+		}
+		if (obj.type.includes('c')) {
+			// 闭合
+			ctx.closePath();
+		}
+		if (obj.type.includes('s')) {
+			// 描线
+			ctx.stroke();
+		}
+	}
+</script>
+
+</html>
